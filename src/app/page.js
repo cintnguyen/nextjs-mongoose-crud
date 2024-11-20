@@ -9,11 +9,12 @@ export default function Home() {
   const [updating, setUpdating] = useState(null)
   const [updatingName, setUpdatingName] = useState("")
   const [updatingDescription, setUpdatingDescription] = useState("")
+  const [search, setSearch] = useState("")
   console.log(updating)
 
   useEffect(() => {
     const getRecipes = async () => {
-      const res = await fetch('/api/recipes', {
+      const res = await fetch('/api/recipes?search='+search, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -108,6 +109,11 @@ export default function Home() {
         </form>
       </section>
       <section>
+        <input
+          placeholder="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        ></input>
         <ul>
           {recipes.map((recipe, i) => {
             return (
@@ -143,7 +149,5 @@ export default function Home() {
       }
 
     </main>
-
-
   );
 }

@@ -18,11 +18,34 @@ export async function POST(req) {
   return new Response(JSON.stringify(newRecipe), { status: 201 });
 }
 
+const searchCache = new Map ()
+
 export async function GET(req) {
   await connectToDatabase(); // Connect to the database
-  const recipes = await Recipe.find();
+  // const recipes = await Recipe.find();
+
+  let recipes
+
+  const { search } = Object.fromEntries(new URL(req.url).searchParams);
+  console.log("SEARCH", search)
+
+  if (search) {
+    // Filter recipes based on the 'search' parameter (e.g., case-insensitive search by name)
+    if (searchCache.has(search)){
+      recipes = searchCache.get(search)
+      console.log("cache hit")
+    }else{
+      recipes = await Recipe.find({ name: { $regex: search, $options: 'i' } });
+      searchCache.set(search, recipes)
+      console.log("cache miss")
+    }
+  } else {
+    // Return all recipes if no 'search' parameter is provided
+    recipes = await Recipe.find();
+  }
   return new Response(JSON.stringify(recipes), { status: 200 });
   //whats the difference between status 200 and 201
+
 }
 
 export async function DELETE(req) {
