@@ -21,7 +21,6 @@ export async function POST(req) {
 export async function GET(req) {
   await connectToDatabase(); // Connect to the database
   const recipes = await Recipe.find();
-  console.log("Fetched recipes", recipes)
   return new Response(JSON.stringify(recipes), { status: 200 });
   //whats the difference between status 200 and 201
 }
@@ -29,7 +28,16 @@ export async function GET(req) {
 export async function DELETE(req) {
   await connectToDatabase(); // Connect to the database
   const { id } = await req.json();
-  console.log(id)
   const deletedRecipe = await Recipe.findByIdAndDelete(id)
   return new Response(JSON.stringify({ message: "Recipe deleted successfully" }), { status: 200 });
+}
+
+export async function PUT(req) {
+  console.log("HELLOOOO")
+  await connectToDatabase(); // Connect to the database
+  const { id, updatingName, updatingDescription} = await req.json();
+  console.log("UPDATE ID",id)
+  const updatedRecipe = await Recipe.findByIdAndUpdate(id, { name: updatingName, description: updatingDescription}, { new: true })
+  console.log("UPDATED STUFF",updatedRecipe)
+  return new Response(JSON.stringify(updatedRecipe), { status: 200 });
 }
