@@ -3,6 +3,7 @@
 // import RecipesList from './components/RecipesList'
 import Home from './components/Home'
 
+
 function ServerComponent({companyName}){
   return (
     <h1>{companyName}</h1>

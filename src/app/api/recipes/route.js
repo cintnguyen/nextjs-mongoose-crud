@@ -2,13 +2,6 @@ import connectToDatabase from '../../lib/mongodb'
 import Recipe from '../../models/Recipe'
 
 
-/*
-1. there were two api folders, one outside of app, one inside, it needs to be inside
-2. we had code leftover using collection which is mongo but were switching to mongoose
-3. we had recipeName and the fetch was also sending recipeName, but the Recipe model requires "name"
-4. we were importing Recipes, should be Recipe from the models/Recipe, i renamed models/Recipes.js to Recipe.js because scheams are usually singular
-5. needed to have Recipe.create() to create the new Recipe
-*/
 export async function POST(req) {
   try {
     await connectToDatabase(); // Connect to the database
