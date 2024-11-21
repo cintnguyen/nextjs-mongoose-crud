@@ -10,12 +10,30 @@ import Recipe from '../../models/Recipe'
 5. needed to have Recipe.create() to create the new Recipe
 */
 export async function POST(req) {
-  await connectToDatabase(); // Connect to the database
-  const { name, description } = await req.json();
-  // const newRecipe = await Recipe.create({ name, description }); // better to keep as this or descrtucture it?
-  const newRecipe = await Recipe.create({ name, description });
-  console.log("new recipe", newRecipe)
-  return new Response(JSON.stringify(newRecipe), { status: 201 });
+  try {
+    await connectToDatabase(); // Connect to the database
+    const { name, description } = await req.json();
+   
+    if (!name || !description) {
+      return new Response(JSON.stringify({ error: "Name and description are required" }), { status: 400 });
+    }
+
+    const newRecipe = await Recipe.create({ name, description });
+    console.log("new recipe", newRecipe)
+
+    console.log("New recipe created:", newRecipe);
+
+    return new Response(JSON.stringify(newRecipe), { status: 201 });
+
+  }catch(error){
+    console.error("Error creating recipe:", error);
+
+    // Return a 500 status for server errors
+    return new Response(
+      JSON.stringify({ error: "An unexpected error occurred", details: error.message }),
+      { status: 500 }
+    );
+  }
 }
 
 const searchCache = new Map ()
@@ -26,9 +44,10 @@ export async function GET(req) {
 
   let recipes
 
-  const { search } = Object.fromEntries(new URL(req.url).searchParams);
+  const searchParams = req.nextUrl.searchParams
+  const search = searchParams.get('search')
   console.log("SEARCH", search)
-
+ 
   if (search) {
     // Filter recipes based on the 'search' parameter (e.g., case-insensitive search by name)
     if (searchCache.has(search)){
