@@ -4,7 +4,7 @@ export default function RecipesList({ handleDelete, recipes, updateForm }) {
             {recipes.map((recipe, i) => {
                 return (
                     <li key={i}
-                    class="p-4 rounded-md shadow-sm  transition-all">
+                    className="p-4 rounded-md shadow-sm  transition-all">
                         <span className="p-4">{recipe.name}</span>
                         <span>{recipe.description}</span>
                         <button className="p-4" onClick={() => handleDelete(recipe._id)}>Delete</button>

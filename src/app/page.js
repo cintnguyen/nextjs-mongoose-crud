@@ -19,3 +19,5 @@ export default function App({companyName}) {
   )
 }
 
+// tried testing out getServerSideProp, may only work with old version of NextJS. Needs pages layout
+

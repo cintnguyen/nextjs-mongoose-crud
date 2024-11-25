@@ -17,7 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     const getRecipes = async () => {
-      const res = await fetch('/api/recipes?search='+search, {
+      const res = await fetch('/api/recipes?search=' + search, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
@@ -36,18 +36,17 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, description }),
       })
-      if (res.status >= 400){
-        throw new Error("bad status:"+res.status)
+      if (res.status >= 400) {
+        throw new Error("bad status:" + res.status)
       }
-      const newRecipe = await res.json(); //turn into an object
+      const newRecipe = await res.json();
       setRecipes(recipes => [...recipes, newRecipe])
 
       setName("")
       setDescription("")
-      // const data = await res.json()
-    }catch (error){
+    } catch (error) {
       console.log("Error Message:", error)
-    }   
+    }
   }
 
 
@@ -73,15 +72,15 @@ export default function Home() {
     setUpdating(recipeToUpdate)
   }
 
-  const handleUpdate = async(e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault()
-    const res = await fetch ( 'api/recipes', {
+    const res = await fetch('api/recipes', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id : updating._id, updatingName, updatingDescription }),
+      body: JSON.stringify({ id: updating._id, updatingName, updatingDescription }),
     }
     )
-    if (res.status === 200){
+    if (res.status === 200) {
       const updatedRecipe = await res.json()
       setRecipes(recipes => {
         const indexOfRecipe = recipes.findIndex(recipe => recipe._id === updatedRecipe._id)
@@ -102,16 +101,16 @@ export default function Home() {
         </ul>
       </nav>
       <section>
-        <form class="space-y-4 max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg" onSubmit={handleSubmit}>
+        <form className="space-y-4 max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg" onSubmit={handleSubmit}>
           <input
-          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Recipe Name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           ></input>
           <textarea
-          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -121,28 +120,33 @@ export default function Home() {
       </section>
       <section>
         <input
-          placeholder="search"
+          className="mt-1 block w-half px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="Search Recipe Here"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         ></input>
-        <RecipesList handleDelete={handleDelete} recipes={recipes} updateForm={updateForm}/>
+        <h2 className="px-6 py-8 ">Recipes List:</h2>
+        <RecipesList handleDelete={handleDelete} recipes={recipes} updateForm={updateForm} />
       </section>
       {updating ?
         (<section>
-          <form onSubmit={handleUpdate}>
-          <input
-            placeholder="Recipe Name"
-            type="text"
-            value={updatingName}
-            onChange={(e) => setUpdatingName(e.target.value)}
-          ></input>
-          <textarea
-            placeholder="Description"
-            value={updatingDescription}
-            onChange={(e) => setUpdatingDescription(e.target.value)}
-          ></textarea>
-          <button type="Submit">Update</button>
-        </form>
+          <form className="space-y-4 max-w-lg mx-auto p-6 bg-white shadow-lg rounded-lg" onSubmit={handleUpdate}>
+            <h3>Update Form</h3>
+            <input
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Recipe Name"
+              type="text"
+              value={updatingName}
+              onChange={(e) => setUpdatingName(e.target.value)}
+            ></input>
+            <textarea
+              className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Description"
+              value={updatingDescription}
+              onChange={(e) => setUpdatingDescription(e.target.value)}
+            ></textarea>
+            <button className="bg-blue-500 text-white py-2 px-4 rounded" type="Submit">Update</button>
+          </form>
         </section>) :
         null
       }

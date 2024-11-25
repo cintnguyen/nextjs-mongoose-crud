@@ -14,7 +14,6 @@ export async function POST(req) {
     const newRecipe = await Recipe.create({ name, description });
     console.log("new recipe", newRecipe)
 
-    console.log("New recipe created:", newRecipe);
 
     return new Response(JSON.stringify(newRecipe), { status: 201 });
 
@@ -56,7 +55,6 @@ export async function GET(req) {
     recipes = await Recipe.find();
   }
   return new Response(JSON.stringify(recipes), { status: 200 });
-  //whats the difference between status 200 and 201
 
 }
 
